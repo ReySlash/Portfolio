@@ -1,0 +1,84 @@
+
+ ################################ Evaluating: logistic_regression ################################ 
+
+Best parameters: {'model__class_weight': 'balanced', 'model__max_iter': 100000, 'model__solver': 'liblinear', 'pca__n_components': None}
+Best cross-validation score: 0.7542677411761577
+Train Accuracy: 0.7415102770330653
+Train Balanced-Accuracy: 0.7519875759733589
+Test Accuracy: 0.7446586763939552
+Test Balanced-Accuracy: 0.7541125620075868
+Confusion Matrix:
+      0    1
+0  1084  388
+1   102  345
+
+Classification Report:
+               precision    recall  f1-score   support
+
+           0       0.91      0.74      0.82      1472
+           1       0.47      0.77      0.58       447
+
+    accuracy                           0.74      1919
+   macro avg       0.69      0.75      0.70      1919
+weighted avg       0.81      0.74      0.76      1919
+
+AUC: 0.8287435560743118
+
+ ################################ Evaluating: random_forest ################################ 
+
+Best parameters: {'model__bootstrap': True, 'model__class_weight': 'balanced', 'model__criterion': 'entropy', 'model__max_depth': 6, 'model__max_features': 'sqrt', 'model__min_samples_leaf': 6, 'model__min_samples_split': 2, 'model__n_estimators': 120, 'model__n_jobs': -1, 'pca__n_components': None}
+Best cross-validation score: 0.7511712405769426
+Train Accuracy: 0.782171581769437
+Train Balanced-Accuracy: 0.7744763609250165
+Test Accuracy: 0.7566440854611777
+Test Balanced-Accuracy: 0.7401160210582629
+Confusion Matrix:
+      0    1
+0  1135  337
+1   130  317
+
+Classification Report:
+               precision    recall  f1-score   support
+
+           0       0.90      0.77      0.83      1472
+           1       0.48      0.71      0.58       447
+
+    accuracy                           0.76      1919
+   macro avg       0.69      0.74      0.70      1919
+weighted avg       0.80      0.76      0.77      1919
+
+AUC: 0.8184021192004668
+
+ ################################ Evaluating: svm ################################ 
+
+Best parameters: {'model__C': 0.1, 'model__class_weight': 'balanced', 'model__gamma': 'scale', 'model__kernel': 'linear', 'pca__n_components': None}
+Best cross-validation score: 0.7240990747265108
+Train Accuracy: 0.6546023235031277
+Train Balanced-Accuracy: 0.724093042701583
+Test Accuracy: 0.6539864512767066
+Test Balanced-Accuracy: 0.7261650739227702
+Confusion Matrix:
+     0    1
+0  870  602
+1   62  385
+
+Classification Report:
+               precision    recall  f1-score   support
+
+           0       0.93      0.59      0.72      1472
+           1       0.39      0.86      0.54       447
+
+    accuracy                           0.65      1919
+   macro avg       0.66      0.73      0.63      1919
+weighted avg       0.81      0.65      0.68      1919
+
+AUC: 0.8236431281003793
+-------------------------------- 
+Best model identified: --------------------------------
+Parameters: {'model__class_weight': 'balanced', 'model__max_iter': 100000, 'model__solver': 'liblinear', 'pca__n_components': None}
+Score: 0.7542677411761577
+----------------------------------------------------------------
+Exporting model
+Type of clf: <class 'sklearn.pipeline.Pipeline'>
+
+Model successfully exported.

@@ -1,0 +1,2 @@
+,model__C,model__class_weight,model__gamma,model__kernel,pca__n_components
+0,0.1,balanced,scale,linear,
