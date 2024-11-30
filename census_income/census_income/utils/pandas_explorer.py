@@ -17,6 +17,7 @@ class explorer(pd.DataFrame):
     percentage tables.
     """
 
+
     def numerical_dist(self, feature,bins = None,kde = None,hue=None):
         """Visualize the distribution of a numerical feature using histogram and boxplot.
 
@@ -62,22 +63,92 @@ class explorer(pd.DataFrame):
 
         return plt.show(), self[feature].value_counts()
 
-    def categorical_dist(self, feature, xtickrotation=0):
-        """Visualize the distribution of a categorical feature using a bar plot.
+    def dist_pieplot(self, feature, hue_order = None, strangle = 90):
+        """Visualize the distribution of a categorical feature using a pie chart.
 
         Args:
             feature (str): The name of the categorical feature to analyze.
-            xtickrotation (int): The rotation angle for the x-axis tick labels.
 
         Returns:
             tuple: A plot of the distribution and a Series with value counts of the feature.
         """
+        
+        plt.title(f'{feature} distribution')
+        # Calculate the frequencies of each category
+        values = self[feature].value_counts().sort_index()
+        
+        # Set Colors
+        colors = sns.color_palette("tab10", n_colors=len(self)) 
+        # Create a pie chart
+        wedges, texts, autotexts = plt.pie(
+            values,
+            labels=values.index,
+            autopct='%1.2f%%',
+            startangle=strangle,
+            pctdistance=0.85,
+            colors=colors,
+        )
+        plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+        plt.tight_layout()
+
+
+    def categorical_dist(self, feature, xtickrotation=0, ytickrotation=0, orient=None):
+        """Visualize the distribution of a categorical feature using a bar plot.
+
+        This function generates a bar plot showing the frequency of each category within 
+        a specified categorical feature. If the number of categories exceeds 10 or if 
+        `orient='h'` is specified, a horizontal bar plot is generated; otherwise, a vertical 
+        bar plot is created. Percentage labels are added next to each bar, indicating the 
+        proportion of each category relative to the total.
+
+        Args:
+            feature (str): The name of the categorical feature to analyze.
+            xtickrotation (int): The rotation angle for x-axis tick labels 
+                                (applicable only for vertical bar plots).
+            ytickrotation (int): The rotation angle for y-axis tick labels 
+                                (applicable only for horizontal bar plots).
+            orient (str, optional): Orientation of the bar plot; use 'h' for a horizontal plot. 
+                                    Defaults to None, which creates a vertical plot if the 
+                                    number of categories is 10 or fewer.
+
+        Returns:
+            tuple: A plot of the distribution and a Series with the value counts of the feature.
+        """
         dist = self[feature].value_counts()
-        sns.barplot(x=dist.index, y=dist.values)
-        plt.xticks(rotation=xtickrotation)
-        return plt.show(), dist
-    
-    def countplot_hue(self, feature, hue, xtickrotation=0):
+
+        # Calculate the percentage of the total
+        percentages = (dist / dist.sum()) * 100
+
+        # Create a DataFrame to facilitate the plot
+        percentages_df = percentages.reset_index()
+        percentages_df.columns = ['Category', 'Percentage']
+
+        if self[feature].value_counts().count() > 10 or orient == 'h':
+            # Generate the horizontal bar plot
+            bar_plot = sns.barplot(y=dist.index, x=dist.values, orient='h')
+
+            # Add percentage labels to the side of each bar
+            for index, row in percentages_df.iterrows():
+                width = bar_plot.patches[index].get_width()
+                bar_plot.text(width + 2, index, f'{row.Percentage:.2f}%', color='black', va='center')
+
+            plt.yticks(rotation=ytickrotation)
+            plt.xlabel('Count')
+            plt.ylabel(feature)
+        else:
+            # Generate the bar plot       
+            bar_plot = sns.barplot(x=dist.index, y=dist.values)
+
+            # Add percentage labels above each bar
+            for index, row in percentages_df.iterrows():
+                height = bar_plot.patches[index].get_height()
+                bar_plot.text(index, height + 2, f'{row.Percentage:.2f}%', color='black', ha='center')
+
+            plt.xticks(rotation=xtickrotation)
+            plt.xlabel('Count')
+            plt.ylabel(feature)
+
+    def countplot_hue(self, feature, hue, xtickrotation=0, orient=None):
         """Create a count plot for a categorical feature, with an additional hue dimension.
 
         Args:
@@ -88,17 +159,26 @@ class explorer(pd.DataFrame):
         Returns:
             None: Displays the count plot.
         """
-        sns.countplot(data=self, x=feature, hue=hue)
-        bars = plt.gca().patches
-        plt.xticks(rotation=xtickrotation)
+        plt.title(f'{feature} distribution by {hue}')
+        if orient is None:
+            sns.countplot(data=self, x=feature, hue=hue)
+            bars = plt.gca().patches
+            plt.xticks(rotation=xtickrotation)
 
-        # Annotate bars with their heights
-        for bar in bars:
-            height = bar.get_height()
-            plt.text(bar.get_x() + bar.get_width() / 2, height + 30, int(height), ha='center')
+            # Annotate bars with their heights
+            for bar in bars:
+                height = bar.get_height()
+                plt.text(bar.get_x() + bar.get_width() / 2, height + 30, int(height), ha='center')
+        else:
+            sns.countplot(data=self, y=feature, hue=hue, orient='h')
+            bars = plt.gca().patches
 
-        return plt.show()
-    
+            # Annotate bars with their width
+            for bar in bars:
+                width = bar.get_width()
+                plt.text(width + 0.5, bar.get_y() + bar.get_height() / 2, int(width), va='center')
+        plt.tight_layout()
+
     def scatter_corr(self, var1, var2, hue=None):
         """Create a scatter plot to visualize the correlation between two variables.
 
@@ -111,9 +191,7 @@ class explorer(pd.DataFrame):
             None: Displays the scatter plot and prints the Pearson correlation index.
         """
         sns.scatterplot(data=self, x=var1, y=var2, hue=hue)
-        print(f'The Pearson Correlation Index Is: {round(self[var1].corr(self[var2]), 3)}')
-        return plt.show()
-    
+
     def percentage_table(self, feature, hue):
         """Generate a percentage table showing the proportion of a hue within each category of a feature.
 
@@ -126,7 +204,7 @@ class explorer(pd.DataFrame):
         """
         # Count the occurrences of each combination of feature and hue
         df1 = self[[feature, hue]].value_counts().reset_index(name='Count')
-        
+
         # Count the total occurrences of each feature category
         total_counts = self[feature].value_counts().reset_index()
         total_counts.columns = [feature, 'Total']
@@ -140,5 +218,47 @@ class explorer(pd.DataFrame):
         # Ensure 'Total' and 'Count' columns are integers
         df1[['Total', 'Count']] = df1[['Total', 'Count']].astype(int)
         df1 = df1.reindex(columns=[feature, 'Total', hue, 'Count', '%'])
-        
+
         return df1
+
+    def feature_describe(self, feature):
+        """Generate descriptive statistics for a feature.
+
+        Args:
+            feature (str): The name of the feature to describe.
+
+        Returns:
+            DataFrame: A DataFrame containing descriptive statistics for the feature.
+        """
+        index = ['count', 'mean', 'median', 'std', 'max', 'min', 'IQR', 'Q1', 'Q2', 'Q3']
+        values = [
+            len(self[feature]),
+            self[feature].mean(),
+            self[feature].median(),
+            self[feature].std(),
+            self[feature].max(),
+            self[feature].min(),
+            self[feature].max() - self[feature].min(),
+            self[feature].quantile(0.25),
+            self[feature].quantile(0.5),
+            self[feature].quantile(0.75)
+        ]
+        statistics = pd.DataFrame(values, index=index, columns=['values'])
+
+        return statistics
+
+    def frequency_table(self, feature):
+        """Generate a frequency table for a given feature in a DataFrame.
+
+        Args:
+            feature (str): The name of the feature to analyze.
+
+        Returns:
+            pd.DataFrame: A DataFrame containing the frequency and percentage distribution of the feature.
+        """
+        dist = self[feature].value_counts()
+        percentage = dist / dist.sum() * 100
+        frequency_table = pd.DataFrame({'Frequency': dist, 'Percentage': percentage})
+
+        return frequency_table
+
