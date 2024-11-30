@@ -1,6 +1,12 @@
-# Telco Customer Churn
+# Customer Churn Prediction Project
 
-Predict behavior to retain customers.
+This project focuses on predicting customer churn for a business using machine learning classification models. The goal is to identify customers who are likely to leave the company, allowing the business to take proactive measures to retain them. Several classification models were trained and evaluated, including Logistic Regression, Random Forest, and Support Vector Machine (SVM). The models were optimized using GridSearchCV, and cross-validation techniques were employed to ensure robust performance. Additionally, class imbalance was addressed by applying class weights. The best-performing model will help guide business decisions regarding customer retention strategies.
+
+Key Features:
+- Classification models trained on historical customer data
+- Class balancing and hyperparameter optimization
+- Model evaluation using cross-validation and performance metrics
+- Insights for improving customer retention strategies
   
 ## Installation guide
 
