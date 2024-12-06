@@ -49,30 +49,30 @@ weighted avg       0.80      0.76      0.77      1919
 
 AUC: 0.8184021192004668
 
- ################################ Evaluating: svm ################################ 
+ ################################ Evaluating: lightgbm ################################ 
 
-Best parameters: {'model__C': 0.1, 'model__class_weight': 'balanced', 'model__gamma': 'scale', 'model__kernel': 'linear', 'pca__n_components': None}
-Best cross-validation score: 0.7240990747265108
-Train Accuracy: 0.6546023235031277
-Train Balanced-Accuracy: 0.724093042701583
-Test Accuracy: 0.6539864512767066
-Test Balanced-Accuracy: 0.7261650739227702
+Best parameters: {'model__class_weight': 'balanced', 'model__learning_rate': 0.05, 'model__max_depth': 9, 'model__n_estimators': 50, 'model__num_leaves': 15, 'model__verbosity': -1, 'pca__n_components': None}
+Best cross-validation score: 0.7472580543240174
+Train Accuracy: 0.7651921358355674
+Train Balanced-Accuracy: 0.7670872286506059
+Test Accuracy: 0.7509119332985931
+Test Balanced-Accuracy: 0.7465052341698278
 Confusion Matrix:
-     0    1
-0  870  602
-1   62  385
+      0    1
+0  1111  361
+1   117  330
 
 Classification Report:
                precision    recall  f1-score   support
 
-           0       0.93      0.59      0.72      1472
-           1       0.39      0.86      0.54       447
+           0       0.90      0.75      0.82      1472
+           1       0.48      0.74      0.58       447
 
-    accuracy                           0.65      1919
-   macro avg       0.66      0.73      0.63      1919
-weighted avg       0.81      0.65      0.68      1919
+    accuracy                           0.75      1919
+   macro avg       0.69      0.75      0.70      1919
+weighted avg       0.81      0.75      0.77      1919
 
-AUC: 0.8236431281003793
+AUC: 0.8202144733002626
 -------------------------------- 
 Best model identified: --------------------------------
 Parameters: {'model__class_weight': 'balanced', 'model__max_iter': 100000, 'model__solver': 'liblinear', 'pca__n_components': None}

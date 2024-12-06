@@ -10,6 +10,8 @@ from sklearn.svm import SVC
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV, KFold, cross_val_score, cross_validate
 
+from lightgbm import LGBMClassifier
+
 from utils import Utils
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report, roc_curve, roc_auc_score, make_scorer, f1_score, balanced_accuracy_score
 from imblearn.under_sampling import RandomUnderSampler
@@ -25,7 +27,7 @@ class Models:
         self.clas = {
             'logistic_regression': LogisticRegression(random_state=42),  # Logistic Regression model
             'random_forest': RandomForestClassifier(random_state=42),    # Random Forest model
-            'svm': SVC(probability=True, random_state=42),               # Support Vector Machine model with probabilities enabled
+            'lightgbm': LGBMClassifier(random_state=42)                  # LightGBM model
         }
 
         # Dictionary containing hyperparameter grids for each model
@@ -56,12 +58,14 @@ class Models:
                 'model__n_jobs': [-1],  # Number of processors to use (use -1 for all)
             },
             # Define the grid of hyperparameters for an SVM model
-            'svm': {
-                'pca__n_components': [None],  # No PCA applied in this configuration; keep all original features
-                'model__C': [0.1,1,10],  # Regularization parameter; higher values reduce regularization, potentially leading to overfitting
-                'model__kernel': ['linear'],  # Use 'linear' for simple relationships and 'rbf' for non-linear relationships
-                'model__gamma': ['scale', 'auto'],  # Kernel coefficient; 'scale' and 'auto' adapt based on data size and variance
-                'model__class_weight': [None, 'balanced'],  # Adjusts weights inversely proportional to class frequencies for imbalance
+            'lightgbm': {
+                'pca__n_components': [None],
+                'model__verbosity': [-1],
+                'model__num_leaves': [13, 15, 35],          # Number of leaves controls the model's complexity.
+                'model__max_depth': [-1, 5, 7, 9],          # -1 allows unlimited depth.
+                'model__learning_rate': [0.05, 0.07, 0.1],  # Learning rate adjusts the step size during training. Lower values improve generalization, while higher values converge faster.
+                'model__n_estimators': [50 ,75, 130],       # Number of boosting iterations. Higher values allow deeper learning at the cost of computation time.
+                'model__class_weight': [None, 'balanced']   # Handle imbalanced classes
             }
         }
 

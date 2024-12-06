@@ -1,0 +1,2 @@
+,model__bootstrap,model__class_weight,model__criterion,model__max_depth,model__max_features,model__min_samples_leaf,model__min_samples_split,model__n_estimators,model__n_jobs,pca__n_components
+0,True,,gini,10,,5,5,180,-1,

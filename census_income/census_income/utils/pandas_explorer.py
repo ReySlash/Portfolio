@@ -48,7 +48,7 @@ class explorer(pd.DataFrame):
             kde=kde,
             hue=hue
         )
-
+        plt.title(f"{feature}'s distribution")
         # Draw lines for mean, median, and standard deviations
         plt.axvline(mean, color="red", label='Mean')
         plt.axvline(median, color="orange", label='Median')
@@ -73,7 +73,7 @@ class explorer(pd.DataFrame):
             tuple: A plot of the distribution and a Series with value counts of the feature.
         """
         
-        plt.title(f'{feature} distribution')
+        plt.title(f"{feature}'s distribution")
         # Calculate the frequencies of each category
         values = self[feature].value_counts().sort_index()
         
@@ -133,8 +133,7 @@ class explorer(pd.DataFrame):
                 bar_plot.text(width + 2, index, f'{row.Percentage:.2f}%', color='black', va='center')
 
             plt.yticks(rotation=ytickrotation)
-            plt.xlabel('Count')
-            plt.ylabel(feature)
+
         else:
             # Generate the bar plot       
             bar_plot = sns.barplot(x=dist.index, y=dist.values)
@@ -145,8 +144,9 @@ class explorer(pd.DataFrame):
                 bar_plot.text(index, height + 2, f'{row.Percentage:.2f}%', color='black', ha='center')
 
             plt.xticks(rotation=xtickrotation)
-            plt.xlabel('Count')
-            plt.ylabel(feature)
+        plt.xlabel('Count')
+        plt.ylabel(feature)
+        plt.title(f"{feature}'s distribution")   
 
     def countplot_hue(self, feature, hue, xtickrotation=0, orient=None):
         """Create a count plot for a categorical feature, with an additional hue dimension.
