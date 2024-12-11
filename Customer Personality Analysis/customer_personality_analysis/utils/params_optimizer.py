@@ -166,6 +166,47 @@ class params_optimizer(pd.DataFrame):
             df_merged_sorted = df_merged.sort_values(by='total_score', ascending=False)
 
             return df_merged_sorted
+        
+    def plot_clusters(self, n_clusters):
+        """
+        Applies PCA with n_components=2, clusters the data using KMeans, and plots the data points
+        colored by their labels with centroids marked.
+
+        Parameters:
+        df (pd.DataFrame): The DataFrame containing the data.
+        n_components (int): The number of principal components to retain (default is 2).
+        n_clusters (int): The number of clusters for KMeans (default is 3).
+        label_column (str): The name of the column containing labels for coloring the points.
+        """
+         # Applying PCA
+        n_components = 2
+        pca = PCA(n_components=n_components, random_state=42)
+        data_pca = pca.fit_transform(self)
+
+        kmeans = KMeans(n_clusters=n_clusters, random_state=42)
+        cluster_labels = kmeans.fit_predict(data_pca)
+
+        # Obtener los centroides
+        centroids = kmeans.cluster_centers_
+
+        # Graficar los resultados
+        plt.figure(figsize=(10, 6))
+        sns.scatterplot(x=data_pca[:, 0], y=data_pca[:, 1], hue=cluster_labels, palette='viridis', s=100, alpha=0.7)
+
+        # Graficar los centroides
+        sns.scatterplot(x=centroids[:, 0], y=centroids[:, 1], color='red', s=200, marker='X', label='Centroids')
+
+        plt.title(f'PCA Result with KMeans Clusters (n_clusters={n_clusters})')
+        plt.xlabel('Principal Component 1')
+        plt.ylabel('Principal Component 2')
+
+        # Agregar una leyenda
+        plt.legend(title='Clusters', bbox_to_anchor=(1.05, 1), loc='upper left')
+        plt.grid(True)
+
+        # Mostrar el gráfico
+        plt.show()
+ 
     
     def hierarchical_dendogram_study(self,pca_n_components_range): 
         # Apply PCA

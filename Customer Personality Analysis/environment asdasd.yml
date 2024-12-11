@@ -20,7 +20,4 @@ dependencies:
   - pyprojroot
   - python=3.9
   - seaborn
-  - missingno
-  - upsetplot
-  - statsmodels
   
