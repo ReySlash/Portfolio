@@ -1,0 +1,64 @@
+
+ ################################ Evaluating: linear_regression ################################ 
+
+Best parameters: {'pca__n_components': None}
+Best cross-validation score (MSE): -38769726.84336049
+Train MSE: 38259673.17514955
+Train RMSE: 6185.440418850509
+Test MSE: 34909257.98721024
+Test RMSE: 5908.405706043741
+Train R2: 0.7532775051417095
+Test R2: 0.7102604070256613
+
+ ################################ Evaluating: ridge_regression ################################ 
+
+Best parameters: {'model__alpha': 0.1, 'pca__n_components': None}
+Best cross-validation score (MSE): -38769850.42859865
+Train MSE: 38259792.648339495
+Train RMSE: 6185.450076456805
+Test MSE: 34897648.36215247
+Test RMSE: 5907.423157532603
+Train R2: 0.7532767347032545
+Test R2: 0.7103567645030976
+
+ ################################ Evaluating: lasso_regression ################################ 
+
+Best parameters: {'model__alpha': 0.001, 'pca__n_components': None}
+Best cross-validation score (MSE): -38769729.87413704
+Train MSE: 38259673.175218716
+Train RMSE: 6185.440418856099
+Test MSE: 34909252.083462305
+Test RMSE: 5908.405206437885
+Train R2: 0.7532775051412636
+Test R2: 0.7102604560255432
+
+ ################################ Evaluating: random_forest ################################ 
+
+Best parameters: {'model__max_depth': 5, 'model__min_samples_leaf': 2, 'model__min_samples_split': 2, 'model__n_estimators': 150, 'pca__n_components': None}
+Best cross-validation score (MSE): -25393477.256383758
+Train MSE: 16248053.292774929
+Train RMSE: 4030.8874076033094
+Test MSE: 20417339.381819565
+Test RMSE: 4518.555010378823
+Train R2: 0.8952223081825053
+Test R2: 0.8305403224475671
+
+ ################################ Evaluating: lightgbm ################################ 
+
+Best parameters: {'model__learning_rate': 0.13, 'model__max_depth': 3, 'model__n_estimators': 28, 'model__num_leaves': 13, 'model__verbosity': -1, 'pca__n_components': None}
+Best cross-validation score (MSE): -25341414.417343054
+Train MSE: 20251299.69063321
+Train RMSE: 4500.144407753291
+Test MSE: 21547969.14003336
+Test RMSE: 4641.979011158211
+Train R2: 0.8694068514144745
+Test R2: 0.8211563302106207
+-------------------------------- 
+Best model identified: --------------------------------
+Parameters: {'model__learning_rate': 0.13, 'model__max_depth': 3, 'model__n_estimators': 28, 'model__num_leaves': 13, 'model__verbosity': -1, 'pca__n_components': None}
+Score (MSE): -25341414.417343054
+----------------------------------------------------------------
+Exporting model
+Type of clf: <class 'sklearn.pipeline.Pipeline'>
+
+Model successfully exported.
